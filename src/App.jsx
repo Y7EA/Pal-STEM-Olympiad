@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings } from 'lucide-react';
+import { Settings, RotateCcw } from 'lucide-react';
 import { useSlotMachine } from './hooks/useSlotMachine';
 import SettingsModal from './components/SettingsModal';
 import Lever from './components/Lever';
@@ -15,6 +15,7 @@ export default function App() {
     candidates,
     winnersConfig,
     revealedCount,
+    resetGame,
     updateWinnersConfig,
     updateCandidates,
     spin,
@@ -125,7 +126,7 @@ export default function App() {
 
       <div className="machine-frame">
         <div className="title-display">
-          <span>{revealedCount === 3 ? "🏆 النتائج النهائية" : `السحب على: ${RANKS[revealedCount]}`}</span>
+          <span>{revealedCount === 3 ? "🏆 النتائج النهائية" : `عرض الفائز بالـ: ${RANKS[revealedCount]}`}</span>
         </div>
 
         <div className="reels-container">
@@ -141,8 +142,12 @@ export default function App() {
         </div>
 
         <div className="controls-area">
-          <button className="settings-btn" onClick={() => setIsSettingsOpen(true)}>
+          <button className="settings-btn" onClick={() => setIsSettingsOpen(true)} title="Settings">
             <Settings size={28} />
+          </button>
+
+          <button className="settings-btn" onClick={resetGame} title="Reset Game" style={{ borderColor: 'rgba(255, 100, 100, 0.5)' }}>
+            <RotateCcw size={28} />
           </button>
         </div>
 
