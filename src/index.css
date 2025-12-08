@@ -1,0 +1,739 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Outfit:wght@400;700;900&display=swap');
+
+:root {
+  --gold: #ffd700;
+  --gold-glow: #ffae00;
+  --deep-purple: #1a0b2e;
+  --neon-pink: #ff007f;
+  --neon-blue: #00f3ff;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+body {
+  margin: 0;
+  font-family: 'Cairo', 'Outfit', sans-serif;
+  background: radial-gradient(circle at center, #2b1055, #000);
+  color: white;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Layout --- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+}
+
+/* Logos Header (Adapted for Dark Mode) */
+.logos-header {
+  position: absolute;
+  top: 20px;
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo-img {
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.logo-box {
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+
+.machine-frame {
+  background: linear-gradient(135deg, #333, #111);
+  padding: 40px;
+  border-radius: 40px;
+  box-shadow:
+    0 0 0 10px #222,
+    0 0 0 20px #d4af37,
+    /* Gold rim */
+    0 20px 50px rgba(0, 0, 0, 0.8),
+    inset 0 0 30px rgba(0, 0, 0, 0.9);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 4px solid #555;
+  width: min(90vw, 800px);
+}
+
+.title-display {
+  background: #000;
+  color: var(--gold);
+  padding: 10px 30px;
+  border-radius: 10px;
+  border: 2px solid var(--gold);
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 0 15px var(--gold-glow);
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 0 0 10px var(--gold-glow);
+  direction: rtl;
+}
+
+.reels-container {
+  display: flex;
+  gap: 20px;
+  background: #000;
+  padding: 30px;
+  /* Increased padding for lights */
+  border-radius: 20px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8);
+  border: 8px solid #333;
+  /* Dark base for lights */
+  position: relative;
+}
+
+/* CARNIVAL LIGHTS (Bulbs) */
+.reels-container::before {
+  content: " ";
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  border-radius: 25px;
+  border: 4px dashed #777;
+  /* The wire */
+  box-shadow: 0 0 0 8px #222;
+  /* casing */
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Light Bulbs Animation */
+.reels-container::after {
+  content: " ";
+  position: absolute;
+  inset: -14px;
+  border-radius: 28px;
+  border: 6px dashed #ffd700;
+  /* The lights (yellow) */
+  filter: drop-shadow(0 0 5px #ffae00);
+  animation: lightsBlink 1s steps(2, start) infinite;
+  pointer-events: none;
+  z-index: 11;
+}
+
+@keyframes lightsBlink {
+  0% {
+    border-color: #ffd700;
+    filter: drop-shadow(0 0 5px #ffae00) drop-shadow(0 0 10px #ffae00);
+  }
+
+  50% {
+    border-color: #554400;
+    /* Off state */
+    filter: none;
+  }
+}
+
+/* --- Reel Component --- */
+.reel-viewport {
+  width: 140px;
+  height: 160px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+  border: 4px solid silver;
+}
+
+.reel-strip {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.static-result img.result-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-reel {
+  font-size: 3rem;
+  color: #ccc;
+  font-weight: bold;
+}
+
+/* Reel Spin Animation */
+.blur-strip {
+  animation: spinBlur 0.3s linear infinite;
+  width: 100%;
+}
+
+.blur-strip img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  filter: blur(2px) brightness(0.9);
+}
+
+@keyframes spinBlur {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* BACKGROUND PARTICLES (Gold Dust) */
+.app-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(#ffd700 1px, transparent 1px),
+    radial-gradient(#d4af37 1px, transparent 1px);
+  background-size: 50px 50px, 30px 30px;
+  background-position: 0 0, 25px 25px;
+  animation: bgFloat 60s linear infinite;
+  opacity: 0.1;
+  /* Subtle */
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes bgFloat {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+.reel-overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+/* --- Lever Component --- */
+.lever-container {
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 200px;
+}
+
+.lever-base {
+  width: 40px;
+  height: 100%;
+  background: #222;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  border-right: 5px solid #444;
+}
+
+.lever-handle {
+  position: absolute;
+  /* Adjust bottom to align pivot inside the housing circle */
+  bottom: 80px;
+  left: 20px;
+  width: 20px;
+  height: 140px;
+  transform-origin: bottom center;
+  /* This is key for rotation */
+  cursor: grab;
+  z-index: 10;
+  /* Ensure it looks connected */
+}
+
+/* Base adjustment if needed */
+.lever-housing {
+  position: absolute;
+  top: 80px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  background: #555;
+  border-radius: 50%;
+  box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.5);
+  /* Make sure housing covers the pivot point */
+  z-index: 5;
+}
+
+.handle-stick {
+  width: 16px;
+  height: 100%;
+  background: linear-gradient(90deg, #ccc, #fff, #999);
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.handle-knob {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
+  border-radius: 50%;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5), inset 2px 2px 5px rgba(255, 255, 255, 0.4);
+}
+
+.lever-handle:hover .handle-knob {
+  filter: brightness(1.2);
+}
+
+.lever-handle.pulled {
+  transform: rotateX(180deg) scaleY(0.8);
+  transition: transform 0.4s ease-in;
+}
+
+.lever-container.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --- Controls --- */
+.controls-area {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.settings-btn {
+  background: none;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.settings-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+/* --- Settings Modal --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #1e1e1e;
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+  border-radius: 20px;
+  border: 1px solid #444;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  direction: ltr;
+  /* Keep settings LTR for now or RTL if needed, usually admin is safer in LTR but let's stick to LTR for code structure */
+}
+
+.modal-header {
+  padding: 20px;
+  background: #2a2a2a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.slots-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.winner-slot {
+  flex: 1;
+  height: 120px;
+  background: #111;
+  border: 2px dashed #444;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.winner-slot.active {
+  border-color: var(--neon-blue);
+  background: rgba(0, 243, 255, 0.05);
+}
+
+.winner-slot.filled {
+  border-style: solid;
+  border-color: var(--gold);
+}
+
+.slot-label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.assigned-winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.assigned-winner img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+}
+
+.assigned-winner span {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.remove-winner-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.empty-slot-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #444;
+}
+
+.candidates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.candidate-card {
+  background: #222;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.candidate-card:hover {
+  background: #333;
+}
+
+.candidate-card.selected {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.candidate-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+.candidate-name {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- Winner Overlay --- */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.5s;
+}
+
+.winner-card {
+  background: radial-gradient(circle, #fff, #ddd);
+  color: #000;
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 0 50px var(--gold);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 5px solid var(--gold);
+  max-width: 400px;
+  width: 90%;
+}
+
+.winner-card img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid var(--gold);
+  margin: 20px 0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Gold Logo using Masking (crisp, not foggy) */
+.logo-gold-mask {
+  width: 100px;
+  height: 100px;
+  /* The Gold Gradient Source */
+  background: linear-gradient(135deg, #ffd700 0%, #fffbe6 50%, #d4af37 100%);
+
+  /* The Mask (will be set inline via React) */
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+
+  /* Luminous Glow */
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 10px rgba(255, 165, 0, 0.6));
+
+  /* Make sure it stands out against dark bg */
+  z-index: 20;
+}
+
+.logo-gold-mask:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)) drop-shadow(0 0 20px rgba(255, 140, 0, 0.8));
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+/* Grand Finale Modal */
+.finale-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.finale-podium {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.podium-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+.podium-place.first {
+  order: 2;
+  transform: scale(1.2);
+  z-index: 10;
+  animation-delay: 0.4s;
+}
+
+.podium-place.second {
+  order: 1;
+  animation-delay: 0.2s;
+}
+
+.podium-place.third {
+  order: 3;
+  animation-delay: 0s;
+}
+
+.podium-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--gold);
+  object-fit: cover;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+}
+
+.first .podium-img {
+  width: 140px;
+  height: 140px;
+  border-color: #ffd700;
+  box-shadow: 0 0 50px var(--gold-glow);
+}
+
+.second .podium-img {
+  border-color: #c0c0c0;
+}
+
+/* Silver */
+.third .podium-img {
+  border-color: #cd7f32;
+}
+
+/* Bronze */
+
+.winner-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.rank-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.finale-title {
+  font-size: 3rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-shadow: 0 0 20px var(--gold-glow);
+  margin-bottom: 20px;
+  animation: popIn 1s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.rank-badge {
+  background: var(--gold);
+  color: #000;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.5) translateY(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
