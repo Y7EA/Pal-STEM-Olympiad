@@ -6,6 +6,9 @@ import Lever from './components/Lever';
 import Reel from './components/Reel';
 import confetti from 'canvas-confetti';
 import logoImg from './assets/logo.png';
+import logo1 from './assets/logo1.jpg';
+import logo2 from './assets/logo2.jpeg';
+import logo3 from './assets/logo3.jpeg';
 
 // Arabic Ranks
 const RANKS = ["المركز الثالث", "المركز الثاني", "المركز الأول"];
@@ -209,6 +212,19 @@ export default function App() {
           <p className="click-to-continue" style={{ marginTop: '50px', color: '#ccc' }}>(اضغط للإغلاق)</p>
         </div>
       )}
+
+      {/* Partners Footer */}
+      <div className="partners-strip">
+        <div className="partner-logo-wrapper">
+          <img src={logo1} alt="Partner 1" className="partner-logo" />
+        </div>
+        <div className="partner-logo-wrapper">
+          <img src={logo2} alt="Partner 2" className="partner-logo" />
+        </div>
+        <div className="partner-logo-wrapper">
+          <img src={logo3} alt="Partner 3" className="partner-logo" />
+        </div>
+      </div>
 
     </div>
   );
